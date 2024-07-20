@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #dcdcdc;
+  border-radius: 50%;
+  border-left: 5px solid rgb(252, 74, 74);
+  animation: spinner infinite 0.5s;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  text-align: center;
+  transition: 0.5s ease-in-out;
+}
+
+.overlay:hover {
+  background: rgba(10, 10, 10, 0.5);
+  opacity: 1;
+  transition: 0.2s ease-in-out;
+}
+
+.text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+  background-color: #ffffff10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.fade {
+  mask-image: linear-gradient(180deg, #000 80%, transparent);
+}
+
+.fade-top-and-bottom {
+  mask-image: linear-gradient(
+    180deg,
+    transparent 6%,
+    rgba(0, 0, 0) 20%,
+    rgba(0, 0, 0, 1) 80%,
+    transparent 90%
+  );
+}
+
+.box-shadow {
+  box-shadow: 1px 1px 67px 0px rgba(255, 255, 255, 1);
+}
+
+.custom-border {
+  border-radius: 40px 40px 999em 40px;
+}
