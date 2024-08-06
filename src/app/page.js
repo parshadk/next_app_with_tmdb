@@ -14,9 +14,12 @@ async function fetchAll() {
   return Promise.all(
     urls.map((url) =>
       fetch(url, { cache: 'no-store' })
-        .then((r) => r.json())
+        .then((response) => response.json())
         .then((data) => ({ data, url }))
-        .catch((error) => ({ error, url }))
+        .catch((error) => {
+          console.error(`Error fetching data from ${url}:`, error);
+          return { error, url, data: { results: [] } }; 
+        })
     )
   );
 }
@@ -25,13 +28,21 @@ export default async function Home() {
   const [
     popularData = { data: { results: [] } },
     topRatedData = { data: { results: [] } },
+    nowPlayingData = { data: { results: [] } },
     upcomingData = { data: { results: [] } },
     seriesData = { data: { results: [] } },
   ] = await fetchAll();
 
-  const random = popularData.data.results.length
-    ? popularData.data.results[
-        Math.floor(Math.random() * popularData.data.results.length)
+ 
+  const popularMovies = popularData.data?.results ?? [];
+  const topRatedMovies = topRatedData.data?.results ?? [];
+  const nowPlayingMovies = nowPlayingData.data?.results ?? [];
+  const upcomingMovies = upcomingData.data?.results ?? [];
+  const topRatedSeries = seriesData.data?.results ?? [];
+
+  const random = popularMovies.length
+    ? popularMovies[
+        Math.floor(Math.random() * popularMovies.length)
       ]
     : null;
 
@@ -39,22 +50,21 @@ export default async function Home() {
     <main className="sm:relative md:absolute top-0 z-0 w-full">
       {random && <HeroBanner movie={random} />}
       <div className="relative ml-6 sm:ml-12 mb-12 flex flex-col gap-6">
-        {popularData.data.results.length > 0 && (
-          <Slider movies={popularData.data.results} title="Popular movies" />
+        {popularMovies.length > 0 && (
+          <Slider movies={popularMovies} title="Popular movies" />
         )}
-        {seriesData.data.results.length > 0 && (
+        {topRatedSeries.length > 0 && (
           <Slider
-            movies={seriesData.data.results.slice(0, 10)}
+            movies={topRatedSeries.slice(0, 10)}
             title="Top rated series"
             isTop10={true}
           />
         )}
-        {upcomingData.data.results.length > 0 && (
-          <Slider movies={upcomingData.data.results} title="Upcoming movies" />
+        {upcomingMovies.length > 0 && (
+          <Slider movies={upcomingMovies} title="Upcoming movies" />
         )}
-
-        {upcomingData.data.results.length > 0 && (
-          <Slider movies={topRatedData.data.results} title="Top Rated" />
+        {topRatedMovies.length > 0 && (
+          <Slider movies={topRatedMovies} title="Top rated movies" />
         )}
       </div>
     </main>
